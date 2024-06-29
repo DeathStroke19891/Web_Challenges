@@ -8,10 +8,12 @@ Probably my easiest challenge which is pretty straight forward.
 + Go into the extensions folder
 + View the background.js file, which has some chinese charecters
 
+`浸穹㍷洶穪牤㝤㔷睰昷穬慧㝧楱栲㙱獢歴㔳㑺㑭㌳獵㕮潺瑲橶祤\u2e6f湩潮`
+
 Now inspecting the binary data of a chinese character given, one can see that it is composed of 2 bytes each.
 Spliting each character in the middle as the title suggests, gives an .onion link
 
-~mxzy3wm6zjrd7d57wpf7zlag7giqh26qsbkt534z4m33su5noztrjvyd.onion~
+`mxzy3wm6zjrd7d57wpf7zlag7giqh26qsbkt534z4m33su5noztrjvyd.onion`
 
 Going to this tor website gives you the flag.
 

